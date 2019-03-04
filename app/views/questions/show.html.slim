@@ -3,4 +3,8 @@ h1
 p
   = @question.body
 
+h3 Answers:
+
+== render @question.answers
+
 = link_to 'New answer', new_question_answer_path(@question)
