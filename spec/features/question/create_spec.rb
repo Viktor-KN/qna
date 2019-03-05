@@ -8,7 +8,7 @@ feature 'User can ask a question', %q{
 
 
   scenario 'user tries to ask a question with filled form' do
-    given(:question) { attributes_for(:question) }
+    question = attributes_for(:question)
 
     visit new_question_path
     fill_in 'Title', with: question[:title]
