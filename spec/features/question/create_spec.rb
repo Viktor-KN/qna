@@ -6,11 +6,11 @@ feature 'User can ask a question', %q{
   I'd like to be able to ask a question
 } do
 
+  background { visit new_question_path }
 
   scenario 'user tries to ask a question with filled form' do
     question = attributes_for(:question)
 
-    visit new_question_path
     fill_in 'Title', with: question[:title]
     fill_in 'Body', with: question[:body]
     click_on 'Create Question'
@@ -21,7 +21,6 @@ feature 'User can ask a question', %q{
   end
 
   scenario 'user tries to ask a question with blank form' do
-    visit new_question_path
     click_on 'Create Question'
 
     expect(page).to have_content "Title can't be blank"
