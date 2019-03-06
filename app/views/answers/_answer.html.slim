@@ -1,3 +1,4 @@
-p
-  = answer.body
-hr
+- unless answer.new_record?
+  p
+    = answer.body
+  hr
