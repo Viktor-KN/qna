@@ -49,6 +49,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question)).to be_a_new(Question)
     end
 
+    it 'assigns logged in user as question author' do
+      expect(assigns(:question).author).to eq user
+    end
+
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -60,6 +64,11 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'with valid attributes' do
+      it 'assigns logged in user as question author' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(assigns(:question).author).to eq user
+      end
+
       it 'saves a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
       end
@@ -78,6 +87,39 @@ RSpec.describe QuestionsController, type: :controller do
       it 're-renders new view' do
         post :create, params: { question: attributes_for(:question, :invalid) }
         expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:user) { create(:user) }
+
+    before { login(user) }
+
+    context 'for own question' do
+      let!(:question) { create(:question, author: user) }
+
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context "for somebody's question" do
+      let(:another_user) { create(:user) }
+      let!(:question) { create(:question, author: another_user) }
+
+      it 'does not destroy the question' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
+      end
+
+      it 'redirects to question show view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to question_path(question)
       end
     end
   end
