@@ -13,6 +13,11 @@ RSpec.describe AnswersController, type: :controller do
         expect(assigns(:question)).to eq question
       end
 
+      it 'assigns logged in user as answer author' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        expect(assigns(:answer).author).to eq user
+      end
+
       it 'saves a new answer for question in the database' do
         expect do
           post :create, params: { question_id: question, answer: attributes_for(:answer) }
@@ -35,6 +40,41 @@ RSpec.describe AnswersController, type: :controller do
       it 're-renders @answer.question show view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
         expect(response).to render_template 'questions/show'
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:user) { create(:user) }
+
+    before { login(user) }
+
+    let(:question) { create(:question) }
+
+    context 'for own answer' do
+      let!(:answer) { create(:answer, author: user, question: question) }
+
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(question)
+      end
+    end
+
+    context "for somebody's question" do
+      let(:another_user) { create(:user) }
+      let!(:answer) { create(:answer, author: another_user, question: question) }
+
+      it 'does not destroy the answer' do
+        expect { delete :destroy, params: { id: answer } }.to_not change(Answer, :count)
+      end
+
+      it 'redirects to question show view' do
+        delete :destroy, params: { id: answer }
+        expect(response).to redirect_to question_path(question)
       end
     end
   end
