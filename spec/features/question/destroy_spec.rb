@@ -6,13 +6,38 @@ feature 'User can delete own question', %q{
   I'd like to be able to delete own question
 } do
 
-  given(:question) { create(:question) }
+  given(:another_user) { create(:user) }
 
-  background { visit question_path(question) }
+  describe 'Authenticated user' do
+    given(:user) { create(:user) }
 
-  scenario 'user tries to delete own question' do
-    click_on 'Delete question'
+    background { sign_in(user) }
 
-    expect(page).to have_content 'Question successfully deleted'
+    scenario 'tries to delete own question' do
+      question = create(:question, author: user)
+
+      visit question_path(question)
+      click_on 'Delete question'
+
+      expect(page).to have_content 'Question successfully deleted'
+    end
+
+    scenario "tries to delete somebody’s question" do
+      question = create(:question, author: another_user)
+
+      visit question_path(question)
+
+      expect(page).to_not have_link 'Delete question'
+    end
+  end
+
+  describe 'Unauthenticated user' do
+    scenario "tries to delete somebody’s question" do
+      question = create(:question, author: another_user)
+
+      visit question_path(question)
+
+      expect(page).to_not have_link 'Delete question'
+    end
   end
 end
