@@ -1,4 +1,6 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, only: %i[new create]
+
   def index
     @questions = Question.all
   end
