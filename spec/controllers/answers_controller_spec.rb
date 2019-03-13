@@ -64,7 +64,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    context "for somebody's question" do
+    context "for somebody's answer" do
       let(:another_user) { create(:user) }
       let!(:answer) { create(:answer, author: another_user, question: question) }
 
