@@ -15,12 +15,13 @@ feature 'User can delete own answer', %q{
     background { sign_in(user) }
 
     scenario 'tries to delete own answer' do
-      create(:answer, author: user, question: question)
+      answer = create(:answer, author: user, question: question)
 
       visit question_path(question)
       click_on 'Delete answer'
 
       expect(page).to have_content 'Answer successfully deleted'
+      expect(page).to_not have_content answer.body
     end
 
     scenario "tries to delete somebody’s answer" do
