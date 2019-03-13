@@ -2,7 +2,7 @@
   p
     = answer.body
 
-  - if answer.can_delete?(current_user)
+  - if current_user&.author_of?(answer)
     div
       = link_to 'Delete answer', answer_path(answer), method: :delete
   hr

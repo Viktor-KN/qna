@@ -3,7 +3,7 @@ h1
 p
   = @question.body
 
-- if @question.can_delete?(current_user)
+- if current_user&.author_of?(@question)
   div
     = link_to 'Delete question', question_path(@question), method: :delete
 
