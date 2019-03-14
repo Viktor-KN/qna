@@ -1,4 +1,4 @@
-- unless answer.new_record?
+- if answer.persisted?
   p
     = answer.body
 

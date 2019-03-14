@@ -8,6 +8,6 @@ class User < ApplicationRecord
   has_many :answers, foreign_key: 'author_id', dependent: :nullify
 
   def author_of?(entry)
-    entry.author.id == id
+    entry.author_id == id
   end
 end
