@@ -8,8 +8,8 @@ p
     = link_to 'Delete question', question_path(@question), method: :delete
 
 h3 Answers:
-
-= render @question.answers
+div class='answers'
+  = render @question.answers
 
 - if user_signed_in?
   = render 'answers/form'

@@ -14,5 +14,6 @@ html
     = render 'shared/header'
 
     .container
-      = render 'shared/flash'
+      div class='flash-messages'
+        = render 'shared/flash'
       = yield

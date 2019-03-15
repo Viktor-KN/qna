@@ -9,37 +9,37 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'assigns logged in user as answer author' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
         expect(assigns(:answer).author).to eq user
       end
 
       it 'saves a new answer for question in the database' do
         expect do
-          post :create, params: { question_id: question, answer: attributes_for(:answer) }
+          post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
         end.to change(question.answers, :count).by(1)
       end
 
-      it 'redirects to @answer.question show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
-        expect(response).to redirect_to assigns(:answer).question
+      it 'renders create view' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
+        expect(response).to render_template :create
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
         expect do
-          post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
+          post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js }
         end.to_not change(Answer, :count)
       end
 
-      it 're-renders @answer.question show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        expect(response).to render_template 'questions/show'
+      it 'renders create view' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js }
+        expect(response).to render_template :create
       end
     end
   end

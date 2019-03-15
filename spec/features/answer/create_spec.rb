@@ -16,17 +16,17 @@ feature 'User can write an answer for question', %q{
       visit question_path(question)
     end
 
-    scenario 'tries to write an answer for question with filled form' do
+    scenario 'tries to write an answer for question with filled form', js: true do
       answer = attributes_for(:answer)
 
-      fill_in 'Body', with: answer[:body]
+      fill_in 'New answer', with: answer[:body]
       click_on 'Create Answer'
 
       expect(page).to have_content 'Answer successfully created'
       expect(page).to have_content answer[:body]
     end
 
-    scenario 'tries to write an answer for question with blank form' do
+    scenario 'tries to write an answer for question with blank form', js: true do
       click_on 'Create Answer'
 
       expect(page).to have_content "Body can't be blank"
