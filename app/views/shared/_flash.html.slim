@@ -1,3 +1,7 @@
 - flash.each do |key, message|
-  p class="#{key}"
-    == message
+  div class="row justify-content-center"
+    = content_tag :div, class: "col col-md-6 alert #{key_to_style(key)} alert-dismissible fade show", role: 'alert' do
+      = message
+      button type="button" class="close" data-dismiss="alert" aria-label='Close'
+        span aria-hidden="true"
+          | &times;
