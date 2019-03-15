@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
+  let(:user) { create(:user) }
+  let(:question) { create(:question) }
+
+  before { login(user) }
+
   describe 'POST #create' do
-    let (:user) { create(:user) }
-    let(:question) { create(:question, author: user) }
-
-    before { login(user) }
-
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
         post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
@@ -45,12 +45,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let(:user) { create(:user) }
-
-    before { login(user) }
-
-    let(:question) { create(:question) }
-
     context 'for own answer' do
       let!(:answer) { create(:answer, author: user, question: question) }
 
@@ -75,6 +69,49 @@ RSpec.describe AnswersController, type: :controller do
       it 'redirects to question show view' do
         delete :destroy, params: { id: answer }
         expect(response).to redirect_to question_path(question)
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    context 'with valid attributes' do
+      let!(:answer) { create(:answer, question: question, author: user) }
+
+      it 'changes answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'new body'
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      let!(:answer) { create(:answer, question: question, author: user) }
+
+      it 'does not change answer attributes' do
+        expect do
+          patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        end.to_not change(answer, :body)
+      end
+
+      it 'renders update view' do
+        patch :update, params: { id: answer, answer: attributes_for(:answer, :invalid) }, format: :js
+        expect(response).to render_template :update
+      end
+    end
+
+    context "for other user's answer" do
+      let(:other_user) { create(:user) }
+      let!(:answer) { create(:answer, question: question, author: other_user) }
+
+      it 'does not change answer attributes' do
+        patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
+        answer.reload
+        expect(answer.body).to_not eq 'new body'
       end
     end
   end
