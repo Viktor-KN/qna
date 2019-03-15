@@ -1,5 +1,10 @@
 - if resource.errors.any?
-  div Errors:
-  - resource.errors.full_messages.each do |message|
-    div
-      == message
+  = content_tag :div, class: 'row justify-content-center resource-errors' do
+    div class="col col-md-6 ml-1 mr-1 alert alert-danger" role="alert"
+      h4 class="alert-heading text-center"
+      = "#{pluralize(resource.errors.count, 'error')} detected"
+      hr
+      ul class="list-group ml-4"
+        - resource.errors.full_messages.each do |message|
+          li class="list-item"
+            = message
