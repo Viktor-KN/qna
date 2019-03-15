@@ -1,7 +1,8 @@
 $('.new-answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% if @answer.persisted? %>
-  $('.answers').append('<%= j render @answer %>');
+  $('.answers').append('<%= content_tag :div, j(render(@answer)), class: "answer-#{@answer.id}" %>');
   $('.new-answer #answer_body').val('');
-  $('.flash-messages').append('<%= render 'shared/flash' %>');
+  $('.flash-messages').html('<%= render 'shared/flash' %>');
+  $(".flash-alert").delay(<%= FLASH_HIDE_DELAY %>).addClass("in").fadeOut(<%= FLASH_FADEOUT_TIME %>);
 <% end %>
