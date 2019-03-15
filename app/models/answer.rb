@@ -1,4 +1,6 @@
 class Answer < ApplicationRecord
+  default_scope { order(:id) }
+
   belongs_to :question
   belongs_to :author, class_name: 'User'
 

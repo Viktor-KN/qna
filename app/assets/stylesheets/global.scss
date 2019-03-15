@@ -5,3 +5,7 @@ html {
 .header {
   margin-bottom: 30px;
 }
+.flash-alert {
+  position: fixed;
+  z-index:1;
+}

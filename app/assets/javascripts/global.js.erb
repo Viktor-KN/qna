@@ -1,0 +1,3 @@
+$(document).on('turbolinks:load', function(){
+    $(".flash-alert").delay(<%= FLASH_HIDE_DELAY %>).addClass("in").fadeOut(<%= FLASH_FADEOUT_TIME %>);
+});

@@ -1,15 +1,18 @@
-h1
+h2
   = @question.title
 p
   = @question.body
 
-- if current_user&.author_of?(@question)
+- if user_signed_in? && current_user.author_of?(@question)
   div
     = link_to 'Delete question', question_path(@question), method: :delete
 
-h3 Answers:
+h4 Answers:
 div class='answers'
-  = render @question.answers
+  - @question.answers.each do |answer|
+    - if answer.persisted?
+      div class='answer-#{answer.id}'
+        = render answer, answer: answer
 
 - if user_signed_in?
   = render 'answers/form'
