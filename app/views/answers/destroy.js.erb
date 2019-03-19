@@ -1,0 +1,5 @@
+<% unless @answer.persisted? %>
+  $('.answer-<%= @answer.id %>').remove();
+  $('.flash-messages').html('<%= render 'shared/flash' %>');
+  $(".flash-alert").delay(<%= FLASH_HIDE_DELAY %>).addClass("in").fadeOut(<%= FLASH_FADEOUT_TIME %>);
+<% end %>

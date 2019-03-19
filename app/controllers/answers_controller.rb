@@ -27,8 +27,6 @@ class AnswersController < ApplicationController
     else
       flash[:alert] = "You don't have permission to do that"
     end
-
-    redirect_to question_path(@answer.question)
   end
 
   private
