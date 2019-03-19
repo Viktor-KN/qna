@@ -3,6 +3,6 @@ p= answer.body
   div class='answer-author-links'
     = link_to 'Edit', "#", class: 'answer-edit-link', data: { answer_id: answer.id }
     = " | "
-    = link_to 'Delete', answer_path(answer), method: :delete
+    = link_to 'Delete', answer_path(answer), method: :delete, remote: true, data: { confirm: 'Are you sure?' }
   = render 'answers/edit_form', answer: answer
 hr
