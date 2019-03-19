@@ -1,8 +1,8 @@
 div class='new-answer-errors'
 = form_with model: [@question, @answer], class: 'new-answer' do |form|
-  div
+  div class='form-group'
     = form.label :body, 'New answer'
-    = form.text_area :body
+    = form.text_area :body, class: 'form-control'
 
   div
     = form.submit
