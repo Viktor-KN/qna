@@ -26,7 +26,7 @@ feature 'User can edit his question', %q{
       within ".question" do
         click_on 'Edit'
         fill_in 'Title', with: 'edited title'
-        fill_in 'Body', with: 'edited question'
+        fill_in 'Your question', with: 'edited question'
         click_on 'Save'
         expect(page).to_not have_content question.body
         expect(page).to have_content 'edited title'
@@ -44,7 +44,7 @@ feature 'User can edit his question', %q{
       within ".question" do
         click_on 'Edit'
         fill_in 'Title', with: ''
-        fill_in 'Body', with: ''
+        fill_in 'Your question', with: ''
         click_on 'Save'
 
         expect(page).to have_content question.title

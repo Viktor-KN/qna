@@ -1,0 +1,11 @@
+div class='question-errors'
+= form_with model: question, class: 'question-edit-form', html: { style: 'display:none;' } do |form|
+  div class='form-group'
+    = form.label :title, 'Title'
+    = form.text_field :title, class: 'form-control'
+  div class='form-group'
+    = form.label :body, 'Your question'
+    = form.text_area :body, class: 'form-control'
+
+  div
+    = form.submit 'Save'
