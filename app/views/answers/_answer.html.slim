@@ -1,8 +1,9 @@
 p= answer.body
 - if user_signed_in? && current_user.author_of?(answer)
   div class='answer-author-links'
-    = link_to 'Edit', "#", class: 'answer-edit-link', data: { answer_id: answer.id }
-    = " | "
-    = link_to 'Delete', answer_path(answer), method: :delete, remote: true, data: { confirm: 'Are you sure?' }
+    = link_to "#", title: 'Edit', class: 'answer-edit-link mr-2', data: { answer_id: answer.id } do
+      = octicon 'pencil', width: 16
+    = link_to answer_path(answer), title: 'Delete', method: :delete, remote: true, data: { confirm: 'Are you sure?' } do
+      = octicon 'trashcan', width: 16
   = render 'answers/edit_form', answer: answer
 hr
