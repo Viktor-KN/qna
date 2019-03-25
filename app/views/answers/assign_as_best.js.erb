@@ -1,0 +1,4 @@
+<% if @answer.best? %>
+  $('.answers').html('<%= j render 'answers/answers', question: @answer.question %>')
+  <%= render 'shared/update_flash' %>
+<% end %>

@@ -1,9 +1,21 @@
-p= answer.body
-- if user_signed_in? && current_user.author_of?(answer)
-  div class='answer-author-links'
-    = link_to "#", title: 'Edit', class: 'answer-edit-link mr-2', data: { answer_id: answer.id } do
-      = octicon 'pencil', width: 16
-    = link_to answer_path(answer), title: 'Delete', method: :delete, remote: true, data: { confirm: 'Are you sure?' } do
-      = octicon 'trashcan', width: 16
-  = render 'answers/edit_form', answer: answer
+div class='answer-layout'
+  div class='answer-left'
+    - if answer.best?
+      = octicon 'check', width: 20, class: 'best-answer'
+  div class='answer-right'
+    p= answer.body
+  div class='answer-management'
+    - if user_signed_in?
+      - if current_user.author_of?(answer.question)
+        div class='question-author-links mb-2'
+          - unless answer.best?
+            = link_to assign_as_best_answer_path(answer), method: :patch, title: 'Make best', class: 'mr-2', remote: true do
+              = octicon 'check', width: 16
+      - if current_user.author_of?(answer)
+        div class='answer-author-links'
+          = link_to "#", title: 'Edit', class: 'answer-edit-link mr-2', data: { answer_id: answer.id } do
+            = octicon 'pencil', width: 16
+          = link_to answer_path(answer), title: 'Delete', method: :delete, remote: true, data: { confirm: 'Are you sure?' } do
+            = octicon 'trashcan', width: 16
+        = render 'answers/edit_form', answer: answer
 hr
