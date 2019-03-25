@@ -1,10 +1,9 @@
 $('.question-errors').html('<%= render 'shared/errors', resource: @question %>');
 
 <% unless @question.errors.present? %>
-$('.question .card-header').html('<%= j @question.title %>');
-$('.question .card-text').html('<%= j @question.body %>');
-$('.question-author-links').show();
-$('.question-edit-form').hide();
-$('.flash-messages').html('<%= render 'shared/flash' %>');
-$(".flash-alert").delay(<%= FLASH_HIDE_DELAY %>).addClass("in").fadeOut(<%= FLASH_FADEOUT_TIME %>);
+  $('.question .card-header').html('<%= j @question.title %>');
+  $('.question .card-text').html('<%= j @question.body %>');
+  $('.question-author-links').show();
+  $('.question-edit-form').hide();
+  <%= render 'shared/update_flash' %>
 <% end %>

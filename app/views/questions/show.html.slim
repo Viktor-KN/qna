@@ -13,11 +13,7 @@ div class='card question'
         = link_to question_path(@question), title: 'Delete', method: :delete, data: { confirm: 'Are you sure?' } do
           = octicon 'trashcan', width: 16
       = render 'questions/edit_form', question: @question
-div class='answers mt-5'
-  - @question.answers.each do |answer|
-    - if answer.persisted?
-      div class='answer-#{answer.id}'
-        = render answer, answer: answer
-
+div class='answers mt-5 p-3'
+  = render 'answers/answers', question: @question
 - if user_signed_in?
   = render 'answers/form'

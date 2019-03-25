@@ -1,0 +1,26 @@
+.best-answer {
+  display: block;
+  vertical-align: text-top;
+  margin-left: auto;
+  margin-right: auto;
+  color: limegreen;
+  fill: currentColor;
+}
+.answer-layout {
+  display: grid;
+  grid-template-areas: "ans-left ans-right"
+                       "ans-left ans-management";
+  grid-template-columns: 50px 1fr;
+  grid-template-rows: auto auto;
+}
+.answer-left {
+  grid-area: ans-left;
+}
+.answer-right {
+  grid-area: ans-right;
+  padding-left: 10px;
+}
+.answer-management {
+  grid-area: ans-management;
+  padding-left: 10px;
+}

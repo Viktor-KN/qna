@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: %i[create update destroy]
+  before_action :authenticate_user!, only: %i[create update destroy assign_as_best]
   before_action :find_question, only: %i[create]
-  before_action :find_answer, only: %i[update destroy]
+  before_action :find_answer, only: %i[update destroy assign_as_best]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -24,6 +24,15 @@ class AnswersController < ApplicationController
     if current_user.author_of?(@answer)
       @answer.destroy
       flash[:notice] = 'Answer successfully deleted'
+    else
+      flash[:alert] = "You don't have permission to do that"
+    end
+  end
+
+  def assign_as_best
+    if current_user.author_of?(@answer.question)
+      @answer.assign_as_best!
+      flash[:notice] = 'Answer successfully made best'
     else
       flash[:alert] = "You don't have permission to do that"
     end

@@ -1,0 +1,4 @@
+- question.answers.each do |answer|
+  - if answer.persisted?
+    div class='answer-#{answer.id} p-2'
+      = render answer, answer: answer
