@@ -39,7 +39,7 @@ RSpec.configure do |config|
   config.include FeatureHelpers, type: :feature
 
   #Capybara.default_driver = :selenium # _headless
-  Capybara.javascript_driver = :selenium # _headless
+  Capybara.javascript_driver = :selenium_headless
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

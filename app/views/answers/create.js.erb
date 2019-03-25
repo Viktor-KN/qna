@@ -1,7 +1,7 @@
 $('.new-answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 
 <% if @answer.persisted? %>
-  $('.answers').append('<%= content_tag :div, j(render(@answer)), class: "answer-#{@answer.id}" %>');
+  $('.answers').append('<%= j render @answer %>');
   $('.new-answer #answer_body').val('');
   <%= render 'shared/update_flash' %>
 <% end %>

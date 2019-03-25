@@ -27,9 +27,9 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
-      flash[:notice] = 'Question successfully updated'
+      flash.now.notice = 'Question successfully updated'
     else
-      flash[:alert] = "You don't have permission to do that"
+      flash.now.alert = "You don't have permission to do that"
     end
   end
 
