@@ -5,7 +5,7 @@ div class='card question'
     p class='card-text'
       = @question.body
 
-  - if user_signed_in? && current_user.author_of?(@question)
+  - if current_user&.author_of?(@question)
     div class='card-footer'
       div class='question-author-links'
         = link_to "#", class: 'question-edit-link mr-2', title: 'Edit', data: { question_id: @question.id } do
@@ -14,6 +14,6 @@ div class='card question'
           = octicon 'trashcan', width: 16
       = render 'questions/edit_form', question: @question
 div class='answers mt-5 p-3'
-  = render 'answers/answers', question: @question
+  = render @question.answers
 - if user_signed_in?
   = render 'answers/form'

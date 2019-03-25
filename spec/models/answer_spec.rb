@@ -24,11 +24,7 @@ RSpec.describe Answer, type: :model do
         expect(second_answer).to_not be_best
       end
 
-      it 'makes answer as best' do
-        expect(first_answer).to be_best
-      end
-
-      it 'saves changes to database' do
+      it 'makes answer as best and saves changes to database' do
         first_answer.reload
 
         expect(first_answer).to be_best

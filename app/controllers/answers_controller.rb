@@ -7,34 +7,34 @@ class AnswersController < ApplicationController
     @answer = @question.answers.new(answer_params)
     @answer.author = current_user
     if @answer.save
-      flash[:notice] = 'Answer successfully created'
+      flash.now.notice = 'Answer successfully created'
     end
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
-      flash[:notice] = 'Answer successfully updated'
+      flash.now.notice = 'Answer successfully updated'
     else
-      flash[:alert] = "You don't have permission to do that"
+      flash.now.alert = "You don't have permission to do that"
     end
   end
 
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-      flash[:notice] = 'Answer successfully deleted'
+      flash.now.notice = 'Answer successfully deleted'
     else
-      flash[:alert] = "You don't have permission to do that"
+      flash.now.alert = "You don't have permission to do that"
     end
   end
 
   def assign_as_best
     if current_user.author_of?(@answer.question)
       @answer.assign_as_best!
-      flash[:notice] = 'Answer successfully made best'
+      flash.now.notice = 'Answer successfully made best'
     else
-      flash[:alert] = "You don't have permission to do that"
+      flash.now.alert = "You don't have permission to do that"
     end
   end
 
