@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user) { create(:user) }
-  let(:question) { create(:question) }
-
-  before { login(user) }
-
   describe 'POST #create' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+
+    before { login(user) }
+
     context 'with valid attributes' do
       it 'assigns the requested question to @question' do
         post :create, params: { question_id: question, answer: attributes_for(:answer), format: :js }
@@ -45,6 +45,11 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+
+    before { login(user) }
+
     context 'for own answer' do
       let!(:answer) { create(:answer, author: user, question: question) }
 
@@ -74,6 +79,11 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    let(:user) { create(:user) }
+    let(:question) { create(:question) }
+
+    before { login(user) }
+
     context 'with valid attributes' do
       let!(:answer) { create(:answer, question: question, author: user) }
 
@@ -112,6 +122,47 @@ RSpec.describe AnswersController, type: :controller do
         patch :update, params: { id: answer, answer: { body: 'new body' } }, format: :js
         answer.reload
         expect(answer.body).to_not eq 'new body'
+      end
+    end
+  end
+
+  describe 'PATCH #assign_as_best' do
+    let(:user) { create(:user) }
+    let(:another_user) { create(:user) }
+    let(:question) { create(:question, author: user) }
+    let!(:answer) { create(:answer, question: question) }
+
+    context 'as question author' do
+      before do
+        login(user)
+        patch :assign_as_best, params: { id: answer }, format: :js
+      end
+
+      it 'changes answer best attribute value to true' do
+        answer.reload
+
+        expect(answer).to be_best
+      end
+
+      it 'renders assign_as_best view' do
+        expect(response).to render_template :assign_as_best
+      end
+    end
+
+    context 'as not question author' do
+      before do
+        login(another_user)
+        patch :assign_as_best, params: { id: answer }, format: :js
+      end
+
+      it 'does not change answer best attribute value' do
+        answer.reload
+
+        expect(answer).to_not be_best
+      end
+
+      it 'renders assign_as_best view' do
+        expect(response).to render_template :assign_as_best
       end
     end
   end
