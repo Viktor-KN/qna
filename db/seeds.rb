@@ -8,4 +8,4 @@
 
 user = User.create!(email: 'bill@foo.bar', password: '123456')
 Question.create!([{ title: 'Example question 1 title', body: 'Example question 1 body', author: user },
-                  { title: 'Example question 2 title', body: 'Example question 2 body' }])
+                  { title: 'Example question 2 title', body: 'Example question 2 body', author: user }])
