@@ -7,12 +7,25 @@ feature 'User can view question and answers to it', %q{
 } do
 
   scenario 'user visits question show page and see question and answers to it' do
-    question = create(:question_with_answers)
+    question = create(:question_with_answers, :with_files, with_answer_files: true)
 
     visit question_path(question)
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    question.answers.each { |answer| expect(page).to have_content answer.body }
+    within '.question' do
+      expect(page).to have_link png_name
+      expect(page).to have_link txt_name
+      expect(page).to have_link zip_name
+    end
+
+    question.answers.each do |answer|
+      within ".answer-#{answer.id}" do
+        expect(page).to have_content answer.body
+        expect(page).to have_link png_name
+        expect(page).to have_link txt_name
+        expect(page).to have_link zip_name
+      end
+    end
   end
 end

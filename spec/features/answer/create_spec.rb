@@ -22,14 +22,34 @@ feature 'User can write an answer for question', %q{
       fill_in 'New answer', with: answer[:body]
       click_on 'Create Answer'
 
+      within '.answers' do
+        expect(page).to have_content answer[:body]
+      end
+
       expect(page).to have_content 'Answer successfully created'
-      expect(page).to have_content answer[:body]
     end
 
     scenario 'tries to write an answer for question with blank form', js: true do
       click_on 'Create Answer'
 
       expect(page).to have_content "Body can't be blank"
+    end
+
+    scenario 'tries to write an answer with attached files', js: true do
+      answer = attributes_for(:answer)
+
+      fill_in 'New answer', with: answer[:body]
+
+      attach_file 'Files', [test_assets_path(png_name), test_assets_path(zip_name)]
+      click_on 'Create Answer'
+
+      within '.answers' do
+        expect(page).to have_content answer[:body]
+        expect(page).to have_link png_name
+        expect(page).to have_link zip_name
+      end
+
+      expect(page).to have_content 'Answer successfully created'
     end
   end
 

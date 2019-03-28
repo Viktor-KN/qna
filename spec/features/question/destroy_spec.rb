@@ -23,22 +23,57 @@ feature 'User can delete own question', %q{
       expect(page).to_not have_link question.title
     end
 
-    scenario "tries to delete somebody’s question" do
+    scenario "tries to delete other user’s question" do
       question = create(:question, author: another_user)
 
       visit question_path(question)
 
       expect(page).to_not have_link 'Delete'
     end
+
+    scenario 'tries to delete attached file in own question', js: true do
+      question = create(:question, author: user, files: [png])
+
+      visit question_path(question)
+
+      within '.question-attached-files' do
+        accept_confirm { click_on 'Delete' }
+
+        expect(page).to_not have_link png_name
+      end
+
+      expect(page).to have_content 'File successfully deleted'
+    end
+
+    scenario "tries to delete attached file in other user's question" do
+      question = create(:question, author: another_user, files: [png])
+
+      visit question_path(question)
+
+      within '.question-attached-files' do
+        expect(page).to_not have_link 'Delete'
+      end
+    end
   end
 
   describe 'Unauthenticated user' do
-    scenario "tries to delete somebody’s question" do
+    scenario "tries to delete other user’s question" do
       question = create(:question, author: another_user)
 
       visit question_path(question)
 
       expect(page).to_not have_link 'Delete'
+    end
+
+    scenario "tries to delete attached file in other user's question" do
+      question = create(:question, author: another_user, files: [png])
+
+      visit question_path(question)
+
+      within '.question-attached-files' do
+        expect(page).to have_link png_name
+        expect(page).to_not have_link 'Delete'
+      end
     end
   end
 end

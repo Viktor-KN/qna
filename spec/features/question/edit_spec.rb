@@ -38,6 +38,23 @@ feature 'User can edit his question', %q{
       expect(page).to have_content 'Question successfully updated'
     end
 
+    scenario 'edits his question by attaching files', js: true do
+      visit question_path(question)
+
+      within ".question" do
+        click_on 'Edit'
+        attach_file 'Files', [test_assets_path(png_name), test_assets_path(zip_name)]
+        click_on 'Save'
+
+        expect(page).to have_content question.title
+        expect(page).to have_content question.body
+        expect(page).to have_link png_name
+        expect(page).to have_link zip_name
+      end
+
+      expect(page).to have_content 'Question successfully updated'
+    end
+
     scenario 'edits his question with errors', js: true do
       visit question_path(question)
 
