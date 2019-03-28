@@ -22,8 +22,14 @@ class AnswersController < ApplicationController
 
   def destroy
     if current_user.author_of?(@answer)
-      @answer.destroy
-      flash.now.notice = 'Answer successfully deleted'
+      if params[:attachment_id]
+        @answer.files.find_by_id(params[:attachment_id]).purge
+        @answer.reload
+        flash.now.notice = 'File successfully deleted'
+      else
+        @answer.destroy
+        flash.now.notice = 'Answer successfully deleted'
+      end
     else
       flash.now.alert = "You don't have permission to do that"
     end
@@ -41,7 +47,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 
   def find_question
@@ -49,6 +55,6 @@ class AnswersController < ApplicationController
   end
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 end

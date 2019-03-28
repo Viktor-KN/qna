@@ -4,6 +4,8 @@ div class='card question'
   div class='card-body'
     p class='card-text'
       = @question.body
+    div class='question-attached-files'
+      = render 'shared/files', resource: @question
 
   - if current_user&.author_of?(@question)
     div class='card-footer'
@@ -12,8 +14,10 @@ div class='card question'
           = octicon 'pencil', width: 16
         = link_to question_path(@question), title: 'Delete', method: :delete, data: { confirm: 'Are you sure?' } do
           = octicon 'trashcan', width: 16
-      = render 'questions/edit_form', question: @question
+      div class='question-edit'
+        = render 'questions/edit_form', question: @question
 div class='answers mt-5 p-3'
   = render @question.answers
 - if user_signed_in?
-  = render 'answers/form'
+  div class='new-answer'
+    = render 'answers/form', resource: [@question, @answer]

@@ -6,6 +6,9 @@
           = octicon 'check', width: 20, class: 'best-answer'
       div class='answer-right'
         p= answer.body
+        div class='answer-attached-files'
+          = render 'shared/files', resource: answer
+
       div class='answer-management'
         - if current_user&.author_of?(answer.question)
           div class='question-author-links mb-2'

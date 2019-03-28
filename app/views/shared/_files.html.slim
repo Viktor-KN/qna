@@ -1,0 +1,10 @@
+- if resource.files.attached?
+  - resource.files.each do |file|
+    = " | "
+    = link_to file.filename.to_s, url_for(file)
+    - if current_user&.author_of?(resource)
+      | &nbsp;
+      = link_to polymorphic_path(resource, attachment_id: file.id), title: 'Delete', method: :delete, remote: true,
+              data: { confirm: 'Are you sure?' } do
+        = octicon :x, class: 'attachment_delete'
+  = " | "

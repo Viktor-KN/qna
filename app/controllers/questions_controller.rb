@@ -35,8 +35,14 @@ class QuestionsController < ApplicationController
 
   def destroy
     if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: 'Question successfully deleted'
+      if params[:attachment_id]
+        @question.files.find_by_id(params[:attachment_id]).purge
+        @question.reload
+        flash.now.notice = 'File successfully deleted'
+      else
+        @question.destroy
+        redirect_to questions_path, notice: 'Question successfully deleted'
+      end
     else
       redirect_to question_path(@question), alert: "You don't have permission to do that"
     end
@@ -45,10 +51,10 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, files: [])
   end
 
   def find_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 end
