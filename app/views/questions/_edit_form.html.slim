@@ -3,9 +3,14 @@ div class='question-errors'
   div class='form-group'
     = form.label :title, 'Title'
     = form.text_field :title, class: 'form-control'
+
   div class='form-group'
     = form.label :body, 'Your question'
     = form.text_area :body, class: 'form-control'
+
+  div class='form-group'
+    = form.label :files
+    = form.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
 
   div
     = form.submit 'Save'

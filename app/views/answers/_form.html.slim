@@ -1,8 +1,12 @@
 div class='new-answer-errors'
-= form_with model: [@question, @answer], class: 'new-answer' do |form|
+= form_with model: resource, class: 'new-answer-form' do |form|
   div class='form-group'
     = form.label :body, 'New answer'
     = form.text_area :body, class: 'form-control'
+
+  div class='form-group'
+    = form.label :files
+    = form.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
 
   div
     = form.submit

@@ -4,5 +4,9 @@ div class='answer-errors'
     = form.label :body, 'Your answer'
     = form.text_area :body, class: 'form-control'
 
+  div class='form-group'
+    = form.label :files
+    = form.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
+
   div
     = form.submit 'Save'
