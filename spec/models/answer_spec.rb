@@ -35,4 +35,19 @@ RSpec.describe Answer, type: :model do
       end
     end
   end
+
+  describe 'default scope sorting' do
+    let(:question) { create(:question) }
+    let!(:first_answer) { create(:answer, question: question) }
+    let!(:second_answer) { create(:answer, question: question, best: true) }
+    let!(:third_answer) { create(:answer, question: question) }
+
+    it 'best answer comes first' do
+      expect(question.answers.first).to eq second_answer
+    end
+
+    it 'first answer comes before third answer' do
+      expect(question.answers[1..2]).to eq [first_answer, third_answer]
+    end
+  end
 end
