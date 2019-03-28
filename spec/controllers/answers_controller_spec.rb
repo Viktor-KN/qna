@@ -51,66 +51,30 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     context 'for own answer' do
-      context 'with attachment_id param provided' do
-        let!(:answer) { create(:answer, :with_files, author: user, question: question) }
+      let!(:answer) { create(:answer, author: user, question: question) }
 
-        it 'purges attached file' do
-          expect do
-            delete :destroy, params: { id: answer, attachment_id: answer.files.last.id }, format: :js
-          end.to change(ActiveStorage::Attachment, :count).by(-1)
-        end
-
-        it 'renders destroy view' do
-          delete :destroy, params: { id: answer, attachment_id: answer.files.last.id }, format: :js
-
-          expect(response).to render_template :destroy
-        end
+      it 'deletes the answer' do
+        expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
       end
 
-      context 'without attachment_id param provided' do
-        let!(:answer) { create(:answer, author: user, question: question) }
+      it 'renders destroy view' do
+        delete :destroy, params: { id: answer }, format: :js
 
-        it 'deletes the answer' do
-          expect { delete :destroy, params: { id: answer }, format: :js }.to change(Answer, :count).by(-1)
-        end
-
-        it 'renders destroy view' do
-          delete :destroy, params: { id: answer }, format: :js
-
-          expect(response).to render_template :destroy
-        end
+        expect(response).to render_template :destroy
       end
     end
 
     context "for other user's answer" do
       let(:another_user) { create(:user) }
+      let!(:answer) { create(:answer, author: another_user, question: question) }
 
-      context 'with attachment_id param provided' do
-        let!(:answer) { create(:answer, :with_files, author: another_user, question: question) }
-
-        it 'does not purge attached file' do
-          expect do
-            delete :destroy, params: { id: answer, attachment_id: answer.files.last.id }, format: :js
-          end.to_not change(ActiveStorage::Attachment, :count)
-        end
-        it 'renders destroy view' do
-          delete :destroy, params: { id: answer, attachment_id: answer.files.last.id }, format: :js
-
-          expect(response).to render_template :destroy
-        end
+      it 'does not destroy the answer' do
+        expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
       end
 
-      context 'without attachment_id param provided' do
-        let!(:answer) { create(:answer, author: another_user, question: question) }
-
-        it 'does not destroy the answer' do
-          expect { delete :destroy, params: { id: answer }, format: :js }.to_not change(Answer, :count)
-        end
-
-        it 'renders destroy view' do
-          delete :destroy, params: { id: answer }, format: :js
-          expect(response).to render_template :destroy
-        end
+      it 'renders destroy view' do
+        delete :destroy, params: { id: answer }, format: :js
+        expect(response).to render_template :destroy
       end
     end
   end

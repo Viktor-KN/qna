@@ -1,6 +1,4 @@
-<% if @answer.persisted? %>
-  $('.answer-<%= @answer.id %> .answer-attached-files').html('<%= render 'shared/files', resource: @answer %>');
-<% else %>
+<% unless @answer.persisted? %>
   $('.answer-<%= @answer.id %>').remove();
 <% end %>
 
