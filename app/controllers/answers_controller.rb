@@ -22,14 +22,8 @@ class AnswersController < ApplicationController
 
   def destroy
     if current_user.author_of?(@answer)
-      if params[:attachment_id]
-        @answer.files.find_by_id(params[:attachment_id]).purge
-        @answer.reload
-        flash.now.notice = 'File successfully deleted'
-      else
-        @answer.destroy
-        flash.now.notice = 'Answer successfully deleted'
-      end
+      @answer.destroy
+      flash.now.notice = 'Answer successfully deleted'
     else
       flash.now.alert = "You don't have permission to do that"
     end

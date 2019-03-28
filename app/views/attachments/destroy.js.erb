@@ -1,0 +1,5 @@
+<% unless @attachment.persisted? %>
+  $('<%= generate_css_selector(@resource) %>').html('<%= render 'shared/files', resource: @resource %>');
+<% end %>
+
+<%= render 'shared/update_flash' %>

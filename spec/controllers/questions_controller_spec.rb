@@ -97,65 +97,30 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'for own question' do
-      context 'with attachment_id param provided' do
-        let!(:question) { create(:question, :with_files, author: user) }
+      let!(:question) { create(:question, author: user) }
 
-        it 'purges attached file' do
-          expect do
-            delete :destroy, params: { id: question, attachment_id: question.files.last.id }, format: :js
-          end.to change(ActiveStorage::Attachment, :count).by(-1)
-        end
-
-        it 'renders destroy view' do
-          delete :destroy, params: { id: question, attachment_id: question.files.last.id }, format: :js
-
-          expect(response).to render_template :destroy
-        end
+      it 'deletes the question' do
+        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
       end
 
-      context 'without attachment_id param provided' do
-        let!(:question) { create(:question, author: user) }
-
-        it 'deletes the question' do
-          expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-        end
-
-        it 'redirects to index' do
-          delete :destroy, params: { id: question }
-          expect(response).to redirect_to questions_path
-        end
+      it 'redirects to index' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to questions_path
       end
     end
 
     context "for other user's question" do
       let(:another_user) { create(:user) }
 
-      context 'with attachment_id param provided' do
-        let!(:question) { create(:question, :with_files, author: another_user) }
+      let!(:question) { create(:question, author: another_user) }
 
-        it 'does not purge attached file' do
-          expect do
-            delete :destroy, params: { id: question, attachment_id: question.files.last.id }, format: :js
-          end.to_not change(ActiveStorage::Attachment, :count)
-        end
-        it 'redirects to question show view' do
-          delete :destroy, params: { id: question, attachment_id: question.files.last.id }, format: :js
-
-          expect(response).to redirect_to question_path(question)
-        end
+      it 'does not destroy the question' do
+        expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
       end
 
-      context 'without attachment_id param provided' do
-        let!(:question) { create(:question, author: another_user) }
-
-        it 'does not destroy the question' do
-          expect { delete :destroy, params: { id: question } }.to_not change(Question, :count)
-        end
-
-        it 'redirects to question show view' do
-          delete :destroy, params: { id: question }
-          expect(response).to redirect_to question_path(question)
-        end
+      it 'redirects to question show view' do
+        delete :destroy, params: { id: question }
+        expect(response).to redirect_to question_path(question)
       end
     end
   end
