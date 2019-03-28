@@ -32,6 +32,20 @@ feature 'User can ask a question', %q{
 
       expect(page).to have_content "Title can't be blank"
     end
+
+    scenario 'tries to ask a question with attached files' do
+      question = attributes_for(:question)
+
+      fill_in 'Title', with: question[:title]
+      fill_in 'Body', with: question[:body]
+
+      attach_file 'Files', [test_assets_path(png_name), test_assets_path(zip_name)]
+      click_on 'Create Question'
+
+      expect(page).to have_content 'Question successfully created'
+      expect(page).to have_link png_name
+      expect(page).to have_link zip_name
+    end
   end
 
   scenario 'Unauthenticated user tries to ask question' do

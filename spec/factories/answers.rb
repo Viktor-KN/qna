@@ -12,6 +12,9 @@ FactoryBot.define do
     trait :invalid do
       body { nil }
     end
-  end
 
+    trait :with_files do
+      files { [FilesTestHelpers.png, FilesTestHelpers.txt, FilesTestHelpers.zip] }
+    end
+  end
 end
