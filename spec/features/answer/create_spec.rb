@@ -40,7 +40,7 @@ feature 'User can write an answer for question', %q{
 
       fill_in 'New answer', with: answer[:body]
 
-      attach_file 'Files', [test_assets_path(png_name), test_assets_path(zip_name)]
+      attach_file :answer_files, [test_assets_path(png_name), test_assets_path(zip_name)]
       click_on 'Create Answer'
 
       within '.answers' do
@@ -50,6 +50,62 @@ feature 'User can write an answer for question', %q{
       end
 
       expect(page).to have_content 'Answer successfully created'
+    end
+
+    scenario 'tries to write an answer with attached links', js: true do
+      answer = attributes_for(:answer)
+      simple_link = attributes_for(:link)
+      gist_link = attributes_for(:link, :gist)
+
+      within '.new-answer' do
+        fill_in 'New answer', with: answer[:body]
+
+        click_on 'Add link'
+        within '#links .nested-fields:last-of-type' do
+          fill_in 'Name', with: simple_link[:name]
+          fill_in 'Url', with: simple_link[:url]
+        end
+
+        click_on 'Add link'
+        within '#links .nested-fields:last-of-type' do
+          fill_in 'Name', with: gist_link[:name]
+          fill_in 'Url', with: gist_link[:url]
+        end
+
+        click_on 'Create Answer'
+      end
+
+      within '.answers' do
+        expect(page).to have_link simple_link[:name]
+        expect(page).to have_link gist_link[:name]
+        expect(page).to have_content 'gist-test-1.txt'
+        expect(page).to have_content 'gist_test_1'
+        expect(page).to have_content 'gist-test-2.txt'
+        expect(page).to have_content 'gist_test_2'
+      end
+
+      expect(page).to have_content 'Answer successfully created'
+    end
+
+    scenario 'tries to write an answer with partially filled link fields', js: true do
+      answer = attributes_for(:answer)
+      simple_link = attributes_for(:link)
+
+      within '.new-answer' do
+        fill_in 'New answer', with: answer[:body]
+
+        click_on 'Add link'
+        within '#links .nested-fields:last-of-type' do
+          fill_in 'Name', with: simple_link[:name]
+        end
+
+        click_on 'Create Answer'
+      end
+
+      expect(page).to have_content "Links url can't be blank"
+      expect(page).to have_content "Links url is an invalid URL"
+      expect(page).to_not have_link simple_link[:name]
+      expect(page).to_not have_content 'Question successfully created'
     end
   end
 

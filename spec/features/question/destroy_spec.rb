@@ -45,12 +45,40 @@ feature 'User can delete own question', %q{
       expect(page).to have_content 'File successfully deleted'
     end
 
+    scenario 'tries to delete attached link in own question', js: true do
+      question = create(:question, author: user)
+      link = create(:link, linkable: question)
+
+      visit question_path(question)
+
+      within '.question-attached-links' do
+        accept_confirm { click_on 'Delete' }
+
+        expect(page).to_not have_link link.name
+      end
+
+      expect(page).to have_content 'Link successfully deleted'
+    end
+
     scenario "tries to delete attached file in other user's question" do
       question = create(:question, author: another_user, files: [png])
 
       visit question_path(question)
 
       within '.question-attached-files' do
+        expect(page).to have_link png_name
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
+    scenario "tries to delete attached link in other user's question" do
+      question = create(:question, author: another_user)
+      link = create(:link, linkable: question)
+
+      visit question_path(question)
+
+      within '.question-attached-links' do
+        expect(page).to have_link link.name
         expect(page).to_not have_link 'Delete'
       end
     end
@@ -72,6 +100,18 @@ feature 'User can delete own question', %q{
 
       within '.question-attached-files' do
         expect(page).to have_link png_name
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
+    scenario "tries to delete attached link in other user's question" do
+      question = create(:question, author: another_user)
+      link = create(:link, linkable: question)
+
+      visit question_path(question)
+
+      within '.question-attached-links' do
+        expect(page).to have_link link.name
         expect(page).to_not have_link 'Delete'
       end
     end

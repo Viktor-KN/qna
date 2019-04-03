@@ -43,12 +43,39 @@ feature 'User can delete own answer', %q{
       expect(page).to have_content 'File successfully deleted'
     end
 
+    scenario 'tries to delete attached link in own answer', js: true do
+      answer = create(:answer, question: question, author: user)
+      link = create(:link, linkable: answer)
+
+      visit question_path(question)
+
+      within '.answer-attached-links' do
+        accept_confirm { click_on 'Delete' }
+
+        expect(page).to_not have_link link.name
+      end
+
+      expect(page).to have_content 'Link successfully deleted'
+    end
+
     scenario "tries to delete attached file in other user's answer" do
       create(:answer, question: question, author: other_user, files: [png])
 
       visit question_path(question)
 
       within '.answer-attached-files' do
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
+    scenario "tries to delete attached link in other user's answer" do
+      answer = create(:answer, question: question, author: other_user)
+      link = create(:link, linkable: answer)
+
+      visit question_path(question)
+
+      within '.answer-attached-links' do
+        expect(page).to have_link link.name
         expect(page).to_not have_link 'Delete'
       end
     end
@@ -82,6 +109,18 @@ feature 'User can delete own answer', %q{
 
       within '.answer-attached-files' do
         expect(page).to have_link png_name
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
+    scenario "tries to delete attached link in other user's answer" do
+      answer = create(:answer, question: question, author: other_user)
+      link = create(:link, linkable: answer)
+
+      visit question_path(question)
+
+      within '.answer-attached-links' do
+        expect(page).to have_link link.name
         expect(page).to_not have_link 'Delete'
       end
     end
