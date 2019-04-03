@@ -1,0 +1,7 @@
+<% unless @link.persisted? %>
+  var cssSelector = '<%= generate_css_selector(@resource, 'links') %>';
+  $(cssSelector).html('<%= render @resource.links %>');
+<% end %>
+
+<%= render 'shared/update_flash' %>
+scanForGists(cssSelector);

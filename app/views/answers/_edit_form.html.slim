@@ -4,8 +4,16 @@ div class='answer-errors'
     = form.label :body, 'Your answer'
     = form.text_area :body, class: 'form-control'
 
-  div class='form-group'
-    = form.label :files
+  | Links:
+  #links.border.p-4.mb-3
+    = form.fields_for :links do |link|
+      - unless link.object.persisted?
+        = render 'links/link_fields', f: link
+    span
+      = link_to_add_association 'Add link', form, :links, partial: 'links/link_fields'
+
+  | Files:
+  .form-group.border.p-4
     = form.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
 
   div

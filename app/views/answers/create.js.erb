@@ -4,4 +4,5 @@ $('.new-answer-errors').html('<%= render 'shared/errors', resource: @answer %>')
   $('.answers').append('<%= j render @answer %>');
   $('.new-answer').html('<%= j render('answers/form', resource: [@question, @question.answers.build]) %>');
   <%= render 'shared/update_flash' %>
+  scanForGists('<%= ".answer-#{@answer.id}" %>');
 <% end %>
