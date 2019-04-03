@@ -17,4 +17,6 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require cocoon
+//= require underscore
+//= require gh3.min.js
 //= require_tree .

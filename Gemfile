@@ -44,7 +44,7 @@ gem 'devise'
 
 gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
-
+gem 'underscore-rails'
 gem 'octicons_helper'
 
 gem "aws-sdk-s3", require: false
