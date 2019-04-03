@@ -4,6 +4,8 @@ div class='card question'
   div class='card-body'
     p class='card-text'
       = @question.body
+    div class='question-attached-links'
+      = render @question.links
     div class='question-attached-files'
       = render 'shared/files', resource: @question
 

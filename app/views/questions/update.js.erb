@@ -3,9 +3,11 @@ $('.question-errors').html('<%= render 'shared/errors', resource: @question %>')
 <% unless @question.errors.present? %>
   $('.question .card-header').html('<%= j @question.title %>');
   $('.question .card-text').html('<%= j @question.body %>');
+  $('.question .question-attached-links').html('<%= render @question.links %>');
   $('.question .question-attached-files').html('<%= render 'shared/files', resource: @question %>');
   $('.question #question_files').val('');
   $('.question-author-links').show();
   $('.question-edit').html('<%= j render('questions/edit_form', question: @question) %>');
   <%= render 'shared/update_flash' %>
+  scanForGists('.question')
 <% end %>

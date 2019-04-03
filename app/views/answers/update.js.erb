@@ -3,4 +3,5 @@ $('<%= ".answer-#{@answer.id}" %> .answer-errors').html('<%= render 'shared/erro
 <% unless @answer.errors.present? %>
   $('<%= ".answer-#{@answer.id}" %>').replaceWith('<%= j render @answer %>');
   <%= render 'shared/update_flash' %>
+  scanForGists('<%= ".answer-#{@answer.id}" %>');
 <% end %>

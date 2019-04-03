@@ -1,0 +1,7 @@
+- if link.persisted?
+  .attached-link
+    - if current_user&.author_of?(link.linkable)
+      = link_to link_path(link), title: 'Delete', method: :delete, remote: true, data: { confirm: 'Are you sure?' } do
+        = octicon :x, class: 'attachment_delete'
+      | &nbsp;
+    = link_to link.name, link.url

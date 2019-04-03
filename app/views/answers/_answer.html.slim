@@ -6,6 +6,8 @@
           = octicon 'check', width: 20, class: 'best-answer'
       div class='answer-right'
         p= answer.body
+        div class='answer-attached-links'
+          = render answer.links
         div class='answer-attached-files'
           = render 'shared/files', resource: answer
 
