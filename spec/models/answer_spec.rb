@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
   describe 'Associations' do
+    it { should have_many(:links).dependent(:destroy) }
     it { should belong_to :question}
     it { should belong_to(:author).class_name('User')}
 
@@ -50,4 +51,6 @@ RSpec.describe Answer, type: :model do
       expect(question.answers[1..2]).to eq [first_answer, third_answer]
     end
   end
+
+  it { should accept_nested_attributes_for :links }
 end

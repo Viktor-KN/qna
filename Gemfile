@@ -46,7 +46,7 @@ gem 'jquery-rails'
 gem 'bootstrap', '~> 4.3.1'
 gem 'underscore-rails'
 gem 'octicons_helper'
-
+gem 'valid_url'
 gem "aws-sdk-s3", require: false
 gem 'cocoon'
 
