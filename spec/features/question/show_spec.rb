@@ -28,4 +28,29 @@ feature 'User can view question and answers to it', %q{
       end
     end
   end
+
+  scenario 'user visits question show page and see links in question and answer', js: true do
+    question = create(:question)
+    answer = create(:answer, question: question)
+    question_link = create(:link, :gist, linkable: question)
+    answer_link = create(:link, :gist, linkable: answer)
+
+    visit question_path(question)
+
+    within '.question' do
+      expect(page).to have_link question_link.name
+      expect(page).to have_content 'gist-test-1.txt'
+      expect(page).to have_content 'gist_test_1'
+      expect(page).to have_content 'gist-test-2.txt'
+      expect(page).to have_content 'gist_test_2'
+    end
+
+    within ".answers" do
+      expect(page).to have_link answer_link.name
+      expect(page).to have_content 'gist-test-1.txt'
+      expect(page).to have_content 'gist_test_1'
+      expect(page).to have_content 'gist-test-2.txt'
+      expect(page).to have_content 'gist_test_2'
+    end
+  end
 end
