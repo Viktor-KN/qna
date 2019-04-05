@@ -12,6 +12,7 @@ class QuestionsController < ApplicationController
 
   def new
     @question = current_user.questions.new
+    @question.build_reward
   end
 
   def create
@@ -20,6 +21,7 @@ class QuestionsController < ApplicationController
     if @question.save
       redirect_to question_path(@question), notice: 'Question successfully created'
     else
+      @question.build_reward unless @question.reward
       render :new
     end
   end
@@ -45,7 +47,8 @@ class QuestionsController < ApplicationController
   private
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url],
+                                     reward_attributes: [:title, :image])
   end
 
   def find_question

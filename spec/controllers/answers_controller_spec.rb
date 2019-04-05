@@ -132,6 +132,7 @@ RSpec.describe AnswersController, type: :controller do
     let(:another_user) { create(:user) }
     let(:question) { create(:question, author: user) }
     let!(:answer) { create(:answer, question: question) }
+    let!(:reward) { create(:reward, question: question, image: png) }
 
     context 'as question author' do
       before do
@@ -143,6 +144,12 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
 
         expect(answer).to be_best
+      end
+
+      it 'assigns reward to author of best answer' do
+        question.reward.reload
+
+        expect(question.reward.recipient).to eq answer.author
       end
 
       it 'renders assign_as_best view' do
@@ -160,6 +167,12 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
 
         expect(answer).to_not be_best
+      end
+
+      it 'does not assign reward to author of best answer' do
+        question.reward.reload
+
+        expect(question.reward.recipient).to_not eq answer.author
       end
 
       it 'renders assign_as_best view' do

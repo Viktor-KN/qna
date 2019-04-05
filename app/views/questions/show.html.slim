@@ -1,6 +1,9 @@
 div class='card question'
   div class='card-header'
     = @question.title
+    - if @question.reward
+      | &nbsp;
+      = octicon 'ruby', class: 'reward'
   div class='card-body'
     p class='card-text'
       = @question.body
