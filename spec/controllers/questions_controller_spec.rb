@@ -53,6 +53,10 @@ RSpec.describe QuestionsController, type: :controller do
       expect(assigns(:question).author).to eq user
     end
 
+    it 'builds new reward for question' do
+      expect(assigns(:question).reward).to be_a_new(Reward)
+    end
+
     it 'renders new view' do
       expect(response).to render_template :new
     end
@@ -82,6 +86,12 @@ RSpec.describe QuestionsController, type: :controller do
     context 'with invalid attributes' do
       it 'does not save the question' do
         expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+      end
+
+      it 'builds new reward for question' do
+        post :create, params: { question: attributes_for(:question, :invalid) }
+
+        expect(assigns(:question).reward).to be_a_new(Reward)
       end
 
       it 're-renders new view' do

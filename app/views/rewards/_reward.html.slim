@@ -1,0 +1,9 @@
+.col-md-6.mb-3.text-center.align-items-stretch
+  .card.mb-3
+    h5.card-header= reward.title
+    .card-body
+      p.card-title
+        | Question:
+        br
+        = reward.question.title
+      p.card-text= image_tag url_for(reward.image)

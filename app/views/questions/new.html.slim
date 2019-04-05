@@ -17,8 +17,21 @@ h1 Create new Question
       = link_to_add_association 'Add link', form, :links, partial: 'links/link_fields'
 
   | Files:
-  .form-group.border.p-4
+  .form-group.border.p-4.mb-3
     = form.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
+
+  | Reward:
+  #reward.border.p-4.mb-3
+    .reward-fields[style="display: none;"]
+      = form.fields_for :reward, @question.reward do |reward_form|
+        .form-group
+          = reward_form.label :title
+          = reward_form.text_field :title, class: 'form-control'
+
+        .form-group
+          = reward_form.label :image
+          = reward_form.file_field :image, direct_upload: true, accept: 'image/png,image/gif,image/jpeg', class: 'form-control-file'
+    = link_to 'Add reward', '#', class: 'question-add-reward-link'
 
   div
     = form.submit
