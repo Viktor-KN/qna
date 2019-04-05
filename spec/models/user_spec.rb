@@ -4,6 +4,7 @@ RSpec.describe User, type: :model do
   describe 'Associations' do
     it { should have_many(:questions).with_foreign_key('author_id').dependent(:nullify) }
     it { should have_many(:answers).with_foreign_key('author_id').dependent(:nullify) }
+    it { should have_many(:rewards).with_foreign_key('recipient_id').dependent(:nullify) }
   end
 
   describe 'Validations' do
