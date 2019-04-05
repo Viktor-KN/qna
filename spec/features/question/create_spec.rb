@@ -97,6 +97,45 @@ feature 'User can ask a question', %q{
       expect(page).to have_content "Links url can't be blank"
       expect(page).to have_content "Links url is an invalid URL"
     end
+
+    scenario 'tries to ask a question with reward', js: true do
+      question = attributes_for(:question)
+
+      fill_in 'Title', with: question[:title]
+      fill_in 'Body', with: question[:body]
+
+      within '#reward' do
+        click_on 'Add reward'
+
+        fill_in 'Title', with: 'Reward title'
+        attach_file 'Image', test_assets_path(png_name)
+      end
+
+      click_on 'Create Question'
+
+      expect(page).to have_content 'Question successfully created'
+      expect(page).to have_css '.reward'
+    end
+
+    scenario 'tries to ask a question with partially filled reward fields', js: true do
+      question = attributes_for(:question)
+
+      fill_in 'Title', with: question[:title]
+      fill_in 'Body', with: question[:body]
+
+      within '#reward' do
+        click_on 'Add reward'
+
+        fill_in 'Title', with: 'Reward title'
+      end
+
+      click_on 'Create Question'
+
+      expect(page).to_not have_content 'Question successfully created'
+      expect(page).to have_content 'Reward image must be attached'
+      expect(page).to have_css '#question_reward_attributes_title'
+      expect(page).to have_css '#question_reward_attributes_image'
+    end
   end
 
   scenario 'Unauthenticated user tries to ask question' do
