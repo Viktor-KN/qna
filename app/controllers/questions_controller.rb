@@ -1,5 +1,5 @@
 class QuestionsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create update destroy]
+  skip_before_action :authenticate_user!, only: %i[index show]
   before_action :find_question, only: %i[show update destroy]
 
   def index
