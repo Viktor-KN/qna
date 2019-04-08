@@ -16,6 +16,7 @@ class Answer < ApplicationRecord
     ActiveRecord::Base.transaction do
       question.answers.update_all(best: false)
       update!(best: true)
+      question.assign_reward!(author)
     end
   end
 end

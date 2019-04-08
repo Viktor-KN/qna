@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function () {
-    $(".flash-alert").delay(<%= FLASH_HIDE_DELAY %>).addClass("in").fadeOut(<%= FLASH_FADEOUT_TIME %>);
+    $(".flash-alert").delay(4000).addClass("in").fadeOut(3000);
     scanForGists();
 });
 

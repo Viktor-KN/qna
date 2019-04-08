@@ -14,6 +14,6 @@ class Question < ApplicationRecord
   validates :title, :body, presence: true
 
   def assign_reward!(user)
-    reward.update(recipient: user) if reward
+    reward.update!(recipient: user) if reward
   end
 end

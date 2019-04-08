@@ -32,7 +32,6 @@ class AnswersController < ApplicationController
   def assign_as_best
     if current_user.author_of?(@answer.question)
       @answer.assign_as_best!
-      @answer.question.assign_reward!(@answer.author)
       flash.now.notice = 'Answer successfully made best'
     else
       flash.now.alert = "You don't have permission to do that"
