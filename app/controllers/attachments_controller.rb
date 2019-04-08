@@ -1,5 +1,4 @@
 class AttachmentsController < ApplicationController
-  before_action :authenticate_user!
   before_action :find_attachment, only: %i[destroy]
 
   def destroy
