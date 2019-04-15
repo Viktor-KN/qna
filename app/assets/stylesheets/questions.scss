@@ -1,3 +1,15 @@
 .reward {
   color: orangered;
 }
+.question-layout {
+  display: grid;
+  grid-template-areas: "que-left que-right";
+  grid-template-columns: 50px 1fr;
+}
+.question-left {
+  grid-area: que-left;
+}
+.question-right {
+  grid-area: que-right;
+  padding-left: 10px;
+}

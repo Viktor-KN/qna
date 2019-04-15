@@ -15,4 +15,39 @@ module ApplicationHelper
       raise RuntimeError, "Unexpected resource type: #{resource.class.to_s}"
     end
   end
+
+  def vote_action_path(resource, action)
+    url_for(controller: resource.model_name.route_key, action: action, id: resource.id, only_path: true)
+  end
+
+  def vote_control(resource, action, result, icon)
+    action_icon = octicon icon, width: 24
+
+    case action
+    when 'vote_up'
+      case result
+      when 1
+        link_to action_icon, vote_action_path(resource, 'vote_delete'), title: 'Cancel vote', method: :delete,
+                remote: true, class: 'vote-action voted-up'
+      when 0
+        link_to action_icon, vote_action_path(resource, 'vote_up'), title:'Vote up', method: :post,
+                remote: true, class: 'vote-action'
+      when -1
+        content_tag :div, action_icon, class: 'vote-action'
+      end
+    when 'vote_down'
+      case result
+      when 1
+        content_tag :div, action_icon, class: 'vote-action'
+      when 0
+        link_to action_icon, vote_action_path(resource, 'vote_down'), title:'Vote down', method: :post,
+                remote: true, class: 'vote-action'
+      when -1
+        link_to action_icon, vote_action_path(resource, 'vote_delete'), title: 'Cancel vote', method: :delete,
+                remote: true, class: 'vote-action voted-down'
+      end
+    else
+      raise RuntimeError, "Unexpected action type: #{action}"
+    end
+  end
 end
