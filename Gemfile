@@ -56,6 +56,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'factory_bot_rails'
   gem 'dotenv-rails'
+  gem 'pry-byebug'
 end
 
 group :development do
@@ -77,6 +78,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'rails-controller-testing'
   gem 'launchy'
+  gem 'with_model'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
