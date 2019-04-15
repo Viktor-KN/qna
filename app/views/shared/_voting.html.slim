@@ -1,0 +1,12 @@
+.vote-up-control
+  - if user_signed_in? && !current_user.author_of?(resource)
+    = vote_control(resource, 'vote_up', result, 'triangle-up')
+  - else
+    = octicon 'triangle-up', width: 24, class: 'voting-disabled'
+.vote-score
+  = resource.vote_score
+.vote-down-control
+  - if user_signed_in? && !current_user.author_of?(resource)
+    = vote_control(resource, 'vote_down', result, 'triangle-down')
+  - else
+    = octicon 'triangle-down', width: 24, class: 'voting-disabled'

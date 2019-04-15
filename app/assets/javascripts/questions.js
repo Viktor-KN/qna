@@ -11,7 +11,9 @@ $(document).on('turbolinks:load', function(){
         $('.question-add-reward-link').hide();
     });
 
-    if ($('input#question_reward_attributes_title')[0].value !== '') {
+    var $rewardTitle = $('input#question_reward_attributes_title');
+
+    if ($rewardTitle.length !== 0 && $rewardTitle[0].value !== '') {
         $('.reward-fields').show();
         $('.question-add-reward-link').hide();
     }

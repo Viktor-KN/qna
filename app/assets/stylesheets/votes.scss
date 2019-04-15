@@ -1,0 +1,26 @@
+.vote {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.vote-action {
+  color: gray;
+}
+a.vote-action:hover {
+  color: forestgreen;
+}
+.vote-score {
+  font-size: x-large;
+}
+.voted-up {
+  color: forestgreen;
+}
+.voted-down {
+  color: orange;
+}
+a.voted-down:hover {
+  color: orange;
+}
+.voting-disabled {
+  opacity: 0.2;
+}

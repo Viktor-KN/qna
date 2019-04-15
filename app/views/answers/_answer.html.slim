@@ -2,6 +2,8 @@
   div class='answer-#{answer.id} p-2'
     div class='answer-layout'
       div class='answer-left'
+        div class='vote'
+          = render 'shared/voting', resource: answer, result: answer.vote_result_for(current_user)
         - if answer.best?
           = octicon 'check', width: 20, class: 'best-answer'
       div class='answer-right'

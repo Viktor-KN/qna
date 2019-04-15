@@ -1,12 +1,16 @@
-div class='card question'
+div class='card question question-#{@question.id}'
   div class='card-header'
     = @question.title
     - if @question.reward
       | &nbsp;
       = octicon 'ruby', class: 'reward'
   div class='card-body'
-    p class='card-text'
-      = @question.body
+    div class='question-layout'
+      div class='question-left'
+        div class='vote'
+          = render 'shared/voting', resource: @question, result: @question.vote_result_for(current_user)
+      div class='question-right card-text'
+        = @question.body
     div class='question-attached-links'
       = render @question.links
     div class='question-attached-files'

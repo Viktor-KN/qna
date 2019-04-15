@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', function () {
-    $(".flash-alert").delay(4000).addClass("in").fadeOut(3000);
+    flashFadeOut();
     scanForGists();
 });
 
@@ -31,4 +31,8 @@ function appendGistContents(elem) {
             $(gistContents).insertAfter(elem);
         });
     });
+}
+
+function flashFadeOut() {
+    $(".flash-alert").delay(4000).addClass("in").fadeOut(3000);
 }
