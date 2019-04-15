@@ -5,6 +5,7 @@ require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
+require 'with_model'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -38,6 +39,8 @@ RSpec.configure do |config|
   config.include ControllerHelpers, type: :controller
   config.include FeatureHelpers, type: :feature
   config.include FilesTestHelpers
+
+  config.extend WithModel
 
   #Capybara.default_driver = :selenium # _headless
   Capybara.javascript_driver = :selenium_headless
