@@ -49,6 +49,9 @@ gem 'octicons_helper'
 gem 'valid_url'
 gem "aws-sdk-s3", require: false
 gem 'cocoon'
+gem 'gon'
+gem 'skim'
+gem 'active_model_serializers', '~> 0.10.0', require: true
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
