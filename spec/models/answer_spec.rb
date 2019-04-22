@@ -4,8 +4,9 @@ RSpec.describe Answer, type: :model do
   describe 'Associations' do
     it { should have_many(:links).dependent(:destroy) }
     it { should have_many(:votes).dependent(:destroy) }
-    it { should belong_to :question}
-    it { should belong_to(:author).class_name('User')}
+    it { should have_many(:comments).dependent(:destroy) }
+    it { should belong_to :question }
+    it { should belong_to(:author).class_name('User') }
 
     it 'have many attached files' do
       expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
