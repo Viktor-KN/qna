@@ -21,6 +21,17 @@ RSpec.describe Question, type: :model do
   it { should accept_nested_attributes_for :links }
   it { should accept_nested_attributes_for :reward }
 
+  describe 'Callbacks' do
+    describe "#broadcast_new_question" do
+      it "is called after new record is created" do
+        question = build(:question)
+
+        expect(question).to receive(:broadcast_new_question)
+        question.save!
+      end
+    end
+  end
+
   describe 'Methods' do
     describe '#assign_reward!' do
       let(:user) { create(:user) }
