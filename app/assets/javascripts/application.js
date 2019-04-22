@@ -19,4 +19,5 @@
 //= require cocoon
 //= require underscore
 //= require gh3.min.js
+//= require skim
 //= require_tree .
