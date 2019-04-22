@@ -9,13 +9,23 @@ feature 'User can ask a question', %q{
 
   describe 'Authenticated user' do
     given(:user) { create(:user) }
+    given(:other_user) { create(:user) }
 
     background do
       sign_in(user)
       visit new_question_path
     end
 
-    scenario 'tries to ask a question with filled form' do
+    scenario 'tries to ask a question with filled form', js: true do
+      using_session('other_user') do
+        sign_in(other_user)
+        visit questions_path
+      end
+
+      using_session('guest') do
+        visit questions_path
+      end
+
       question = attributes_for(:question)
 
       fill_in 'Title', with: question[:title]
@@ -25,6 +35,14 @@ feature 'User can ask a question', %q{
       expect(page).to have_content 'Question successfully created'
       expect(page).to have_content question[:title]
       expect(page).to have_content question[:body]
+
+      using_session('other_user') do
+        expect(page).to have_content question[:title]
+      end
+
+      using_session('guest') do
+        expect(page).to have_content question[:title]
+      end
     end
 
     scenario 'tries to ask a question with blank form' do
