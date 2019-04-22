@@ -10,6 +10,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = @question.answers.new
+    gon.push(question_id: @question.id, answers: @question.answers.ids, current_user: current_user ? current_user.id : 0)
   end
 
   def new
