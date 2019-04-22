@@ -1,6 +1,6 @@
-$(document).on('turbolinks:load', function() {
+$(document).on('turbolinks:load', function () {
 
-    $('.vote').on('ajax:success', 'a.vote-action', function(e) {
+    $('.container').on('ajax:success', 'a.vote-action', function (e) {
         var resourceData = e.detail[0];
         var selector = '.' + resourceData.type + '-' + resourceData.id;
 
@@ -15,17 +15,3 @@ $(document).on('turbolinks:load', function() {
             renderFlashMessage(resourceData.message, 'danger');
         });
 });
-
-function renderFlashMessage(message, role) {
-    $('.flash-messages').html(`
-        <div class="row justify-content-center">
-            <div class="col col-md-4 alert flash-alert alert-${role} alert-dismissible fade show in" role="alert">
-                ${message}
-                <button aria-label="Close" class="close" data-dismiss="alert" type="button">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-        </div>
-        `);
-    flashFadeOut();
-}

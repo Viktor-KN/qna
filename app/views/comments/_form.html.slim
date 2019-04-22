@@ -1,0 +1,6 @@
+= form_with model: [resource, resource.comments.new], class: 'new-comment-form', html: { style: 'display: none;' } do |form|
+  div class='form-group'
+    = form.label :body, 'New comment'
+    = form.text_area :body, class: 'form-control'
+  div
+    = form.submit

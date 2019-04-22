@@ -1,0 +1,49 @@
+div class='answer-#{@answer.id} p-2'
+  div class='answer-layout'
+    div class='answer-left'
+      div class='vote'
+        .vote-up-control
+          - if(gon.current_user == 0)
+            svg.octicon.octicon-triangle-up.voting-disabled aria-hidden="true" height="32" version="1.1" viewbox="0 0 12 16" width="24"
+              path d="M12 11L6 5l-6 6h12z" fill-rule="evenodd"
+          - else
+            a.vote-action data-method="post" data-remote="true" href="/answers/#{@answer.id}/vote_up" rel="nofollow" title="Vote up"
+              svg.octicon.octicon-triangle-up aria-hidden="true" height="32" version="1.1" viewbox="0 0 12 16" width="24"
+                path d="M12 11L6 5l-6 6h12z" fill-rule="evenodd"
+        .vote-score 0
+        .vote-down-control
+          - if (gon.current_user == 0)
+            svg.octicon.octicon-triangle-down.voting-disabled aria-hidden="true" height="32" version="1.1" viewbox="0 0 12 16" width="24"
+              path d="M0 5l6 6 6-6H0z" fill-rule="evenodd"
+          - else
+            a.vote-action data-method="post" data-remote="true" href="/answers/#{@answer.id}/vote_down" rel="nofollow" title="Vote down"
+              svg.octicon.octicon-triangle-down aria-hidden="true" height="32" version="1.1" viewbox="0 0 12 16" width="24"
+                path d="M0 5l6 6 6-6H0z" fill-rule="evenodd"
+    div class='answer-right'
+      p= @answer.body
+      div class='answer-attached-links'
+        - for link in @answer.links
+          .attached-link
+            a href="#{link.url}"
+              | #{link.name}
+      div class='answer-attached-files'
+        - if (!_.isEmpty(@answer.files))
+          - for file in @answer.files
+            = " | "
+            a href="#{file.path}"
+              | #{file.name}
+          = " | "
+    div class='answer-management'
+  hr
+  div class='answer-#{@answer.id}-comments comments col col-md-10 offset-md-2 mt-3'
+    div class='new-comment-errors'
+    - if(gon.current_user != 0)
+      form.new-comment-form accept-charset="UTF-8" action="/answers/#{@answer.id}/comments" data-remote="true" method="post" style="display: none;"
+        input name="utf8" type="hidden" value="✓"
+        input name="authenticity_token" type="hidden" value="#{$('meta[name="csrf-token"]').attr('content')}"
+        .form-group
+          label for="comment_body"  New comment
+          textarea#comment_body.form-control name="comment[body]"
+        div
+          input data-disable-with="Create Comment" name="commit" type="submit" value="Create Comment"
+      a.new-comment-link data-commentable="answer-#{@answer.id}" href="#" New comment

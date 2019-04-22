@@ -27,3 +27,9 @@
               = octicon 'trashcan', width: 16
           = render 'answers/edit_form', answer: answer
     hr
+    div class='answer-#{answer.id}-comments comments col col-md-10 offset-md-2 mt-3'
+      = render answer.comments
+      div class='new-comment-errors'
+      - if user_signed_in?
+        = render 'comments/form', resource: answer
+        = link_to 'New comment', '#', class: 'new-comment-link', data: { commentable: "answer-#{answer.id}" }
