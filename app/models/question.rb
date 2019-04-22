@@ -15,7 +15,15 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
 
+  after_commit :broadcast_new_question, on: :create
+
   def assign_reward!(user)
     reward.update!(recipient: user) if reward
+  end
+
+  private
+
+  def broadcast_new_question
+    BroadcastObjectCreationJob.perform_later("new_question_events", question: self)
   end
 end

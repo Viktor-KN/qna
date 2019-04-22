@@ -12,8 +12,21 @@ RSpec.describe Answer, type: :model do
     end
   end
 
+  it { should accept_nested_attributes_for :links }
+
   describe 'Validations' do
     it { should validate_presence_of :body }
+  end
+
+  describe 'Callbacks' do
+    describe "#broadcast_new_answer" do
+      it "is called after new record is created" do
+        answer = build(:answer)
+
+        expect(answer).to receive(:broadcast_new_answer)
+        answer.save!
+      end
+    end
   end
 
   describe 'Methods' do
@@ -52,6 +65,4 @@ RSpec.describe Answer, type: :model do
       expect(question.answers[1..2]).to eq [first_answer, third_answer]
     end
   end
-
-  it { should accept_nested_attributes_for :links }
 end

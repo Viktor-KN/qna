@@ -14,11 +14,20 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_commit :broadcast_new_answer, on: :create
+
   def assign_as_best!
     ActiveRecord::Base.transaction do
       question.answers.update_all(best: false)
       update!(best: true)
       question.assign_reward!(author)
     end
+  end
+
+  private
+
+  def broadcast_new_answer
+    BroadcastObjectCreationJob
+      .perform_later("new_answer_events_for_question_#{self.question_id}", answer: ::AnswerSerializer.new(self).as_json)
   end
 end
