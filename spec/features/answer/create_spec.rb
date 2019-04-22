@@ -10,6 +10,7 @@ feature 'User can write an answer for question', %q{
 
   describe 'Authenticated user' do
     given(:user) { create(:user) }
+    given(:other_user) { create(:user) }
 
     background do
       sign_in(user)
@@ -17,16 +18,33 @@ feature 'User can write an answer for question', %q{
     end
 
     scenario 'tries to write an answer for question with filled form', js: true do
+      using_session('other_user') do
+        sign_in(other_user)
+        visit question_path(question)
+      end
+
+      using_session('guest') do
+        visit question_path(question)
+      end
+
       answer = attributes_for(:answer)
 
       fill_in 'New answer', with: answer[:body]
       click_on 'Create Answer'
 
       within '.answers' do
-        expect(page).to have_content answer[:body]
+        expect(page).to have_content answer[:body], count: 1
       end
 
       expect(page).to have_content 'Answer successfully created'
+
+      using_session('other_user') do
+        expect(page).to have_content answer[:body]
+      end
+
+      using_session('guest') do
+        expect(page).to have_content answer[:body]
+      end
     end
 
     scenario 'tries to write an answer for question with blank form', js: true do
@@ -36,6 +54,15 @@ feature 'User can write an answer for question', %q{
     end
 
     scenario 'tries to write an answer with attached files', js: true do
+      using_session('other_user') do
+        sign_in(other_user)
+        visit question_path(question)
+      end
+
+      using_session('guest') do
+        visit question_path(question)
+      end
+
       answer = attributes_for(:answer)
 
       fill_in 'New answer', with: answer[:body]
@@ -50,9 +77,28 @@ feature 'User can write an answer for question', %q{
       end
 
       expect(page).to have_content 'Answer successfully created'
+
+      using_session('other_user') do
+        expect(page).to have_link png_name
+        expect(page).to have_link zip_name
+      end
+
+      using_session('guest') do
+        expect(page).to have_link png_name
+        expect(page).to have_link zip_name
+      end
     end
 
     scenario 'tries to write an answer with attached links', js: true do
+      using_session('other_user') do
+        sign_in(other_user)
+        visit question_path(question)
+      end
+
+      using_session('guest') do
+        visit question_path(question)
+      end
+
       answer = attributes_for(:answer)
       simple_link = attributes_for(:link)
       gist_link = attributes_for(:link, :gist)
@@ -85,6 +131,24 @@ feature 'User can write an answer for question', %q{
       end
 
       expect(page).to have_content 'Answer successfully created'
+
+      using_session('other_user') do
+        expect(page).to have_link simple_link[:name]
+        expect(page).to have_link gist_link[:name]
+        expect(page).to have_content 'gist-test-1.txt'
+        expect(page).to have_content 'gist_test_1'
+        expect(page).to have_content 'gist-test-2.txt'
+        expect(page).to have_content 'gist_test_2'
+      end
+
+      using_session('guest') do
+        expect(page).to have_link simple_link[:name]
+        expect(page).to have_link gist_link[:name]
+        expect(page).to have_content 'gist-test-1.txt'
+        expect(page).to have_content 'gist_test_1'
+        expect(page).to have_content 'gist-test-2.txt'
+        expect(page).to have_content 'gist_test_2'
+      end
     end
 
     scenario 'tries to write an answer with partially filled link fields', js: true do
